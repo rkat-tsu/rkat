@@ -1,25 +1,29 @@
 <?php
+// database/seeders/DatabaseSeeder.php
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema; // Tambahkan ini
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
      * Seed the application's database.
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // 1. NONAKTIFKAN pemeriksaan Foreign Key
+        Schema::disableForeignKeyConstraints(); 
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $this->call([
+            ProgramKerjaSeeder::class,
+            UnitSeeder::class,
+            UserSeeder::class,
+            RkatHeaderSeeder::class,
         ]);
+
+        // 2. AKTIFKAN kembali pemeriksaan Foreign Key
+        Schema::enableForeignKeyConstraints();
     }
 }

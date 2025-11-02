@@ -1,56 +1,37 @@
 <?php
 
-// app/Models/RkatHeader.php
-
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo; // <-- PENTING: Import BelongsTo
 
 class RkatHeader extends Model
 {
     use HasFactory;
-
+    
     protected $primaryKey = 'id_header';
+    protected $table = 'rkat_headers';
 
+    // Pastikan semua kolom yang diisi di Seeder dan Controller ada di $fillable
     protected $fillable = [
-        'tahun_anggaran',
         'id_unit',
-        'diajukan_oleh',
-        'nomor_dokumen',
+        'id_proker', // Pastikan kolom ini ada
+        'tahun_anggaran',
         'status_persetujuan',
-        'tanggal_pengajuan',
+        'total_biaya', // Pastikan kolom ini ada
+        'diajukan_oleh', // Pastikan kolom ini ada
     ];
 
-    protected $casts = [
-        'tanggal_pengajuan' => 'datetime',
-    ];
-    
-    // Relasi ke TahunAnggaran
-    public function tahunAnggaran()
-    {
-        return $this->belongsTo(TahunAnggaran::class, 'tahun_anggaran', 'tahun_anggaran');
-    }
-    
-    // Relasi ke User (yang mengajukan)
-    public function pengaju()
-    {
-        // Asumsi model User Anda ada di App\Models\User dan primary key-nya id_user
-        return $this->belongsTo(User::class, 'diajukan_oleh', 'id_user');
-    }
-
-    public function unit(): BelongsTo
+    // Relasi ke Unit
+    public function unit(): BelongsTo // <-- Type hint yang benar
     {
         return $this->belongsTo(Unit::class, 'id_unit', 'id_unit');
     }
 
-    public function rkatDetails()
+    // Relasi ke Program Kerja (Asumsi model ProgramKerja ada)
+    public function programKerja(): BelongsTo 
     {
-        return $this->hasMany(RkatDetail::class, 'id_header', 'id_header');
-    }
-
-    public function logPersetujuans()
-    {
-        return $this->hasMany(LogPersetujuan::class, 'id_header', 'id_header');
+        return $this->belongsTo(ProgramKerja::class, 'id_proker', 'id_proker');
     }
 }
