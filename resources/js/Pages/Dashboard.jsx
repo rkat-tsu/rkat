@@ -4,24 +4,15 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import React from 'react';
 
-// Data statis sebagai placeholder, Anda harus mengambil ini dari controller
-const DUMMY_STATS = {
-    total: 20,
-    pending: 10,
-    approved: 7,
-    rejected: 3,
-};
+// HAPUS DUMMY_STATS dan DUMMY_RKAT_TERBARU
+// const DUMMY_STATS = { ... };
+// const DUMMY_RKAT_TERBARU = [ ... ];
 
-const DUMMY_RKAT_TERBARU = [
-    { unit: 'F. Vokasi', judul: 'Lorem ipsum dolor sit amet, consectetur...', waktu: '5 menit yang lalu', status: 'Menunggu Persetujuan' },
-    { unit: 'BEM', judul: 'Lorem ipsum dolor sit amet, consectetur...', waktu: '1 Jam yang lalu', status: 'Approve' },
-    { unit: 'CIT', judul: 'Lorem ipsum dolor sit amet, consectetur...', waktu: '2 Jam yang lalu', status: 'Pending' },
-    { unit: 'BPUK', judul: 'Lorem ipsum dolor sit amet, consectetur...', waktu: '3 Jam yang lalu', status: 'Ditolak' },
-];
-
-export default function Dashboard({ auth }) {
+// ▼▼▼ [DIUBAH] Terima props 'stats' dan 'rkatTerbaru' dari controller ▼▼▼
+export default function Dashboard({ auth, stats, rkatTerbaru }) {
     
     // Fungsi bantuan untuk mendapatkan style dan emoji status
+    // (Tidak perlu diubah)
     const getStatusInfo = (status) => {
         switch (status) {
             case 'Menunggu Persetujuan':
@@ -37,11 +28,12 @@ export default function Dashboard({ auth }) {
         }
     };
 
+    // ▼▼▼ [DIUBAH] Gunakan prop 'stats' (sebelumnya DUMMY_STATS) ▼▼▼
     const statisticCards = [
-        { label: 'Total RKAT', value: DUMMY_STATS.total, icon: '📝', color: 'bg-blue-100 text-blue-800' },
-        { label: 'Pending', value: DUMMY_STATS.pending, icon: '⏳', color: 'bg-yellow-100 text-yellow-800' },
-        { label: 'Approve', value: DUMMY_STATS.approved, icon: '✅', color: 'bg-green-100 text-green-800' },
-        { label: 'Ditolak', value: DUMMY_STATS.rejected, icon: '❌', color: 'bg-red-100 text-red-800' },
+        { label: 'Total RKAT', value: stats.total, icon: '📝', color: 'bg-blue-100 text-blue-800' },
+        { label: 'Pending', value: stats.pending, icon: '⏳', color: 'bg-yellow-100 text-yellow-800' },
+        { label: 'Approve', value: stats.approved, icon: '✅', color: 'bg-green-100 text-green-800' },
+        { label: 'Ditolak', value: stats.rejected, icon: '❌', color: 'bg-red-100 text-red-800' },
     ];
     
     return (
@@ -60,7 +52,7 @@ export default function Dashboard({ auth }) {
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
                         
-                        {/* STATISTIK RKAT CARDS (Sesuai Gambar Anda) */}
+                        {/* STATISTIK RKAT CARDS (Sudah dinamis) */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                             {statisticCards.map((card, index) => (
                                 <div key={index} className={`p-6 rounded-lg shadow-md ${card.color} dark:bg-opacity-20 flex items-center justify-between`}>
@@ -77,7 +69,8 @@ export default function Dashboard({ auth }) {
                         <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">RKAT Terbaru</h3>
                         <div className="bg-white dark:bg-gray-700 rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
                             
-                            {DUMMY_RKAT_TERBARU.map((rkat, index) => {
+                            {/* ▼▼▼ [DIUBAH] Gunakan prop 'rkatTerbaru' (sebelumnya DUMMY_RKAT_TERBARU) ▼▼▼ */}
+                            {rkatTerbaru.map((rkat, index) => {
                                 const info = getStatusInfo(rkat.status);
                                 return (
                                     <div 

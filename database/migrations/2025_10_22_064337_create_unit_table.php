@@ -16,28 +16,34 @@ return new class extends Migration
             // Tipe unit: Fakultas, Prodi, Unit, atau Lainnya
             $table->enum('tipe_unit', ['Fakultas', 'Prodi', 'Unit', 'Lainnya']);
             
-            // Relasi Kepemimpinan: FK ke users.id_user (PK)
-            // Ini akan berisi ID user yang perannya adalah Dekan atau Kepala Unit
+            // ✅ Jalur persetujuan tanpa after()
+            $table->enum('jalur_persetujuan', ['akademik', 'non_akademik'])
+                  ->default('akademik');
+
+            // Relasi Kepemimpinan
             $table->unsignedBigInteger('id_kepala')->nullable();
             $table->foreign('id_kepala')->references('id_user')->on('users')->onDelete('set null'); 
 
-            // Hirarki: FK ke unit.id_unit (misal, Prodi merujuk ke Fakultas)
+            // Hirarki antar unit
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->foreign('parent_id')->references('id_unit')->on('unit')->onDelete('cascade');
 
             $table->timestamps();
         });
 
+        // Relasi users → unit
         Schema::table('users', function (Blueprint $table) {
             $table->foreign('id_unit')->references('id_unit')->on('unit')->onDelete('set null');
         });
-
     }
+
     public function down(): void
     {
-        Schema::dropIfExists('unit');
+        // Hapus FK users → unit dulu sebelum drop tabel unit
         Schema::table('users', function (Blueprint $table) {
             $table->dropForeign(['id_unit']);
         });
+
+        Schema::dropIfExists('unit');
     }
 };
