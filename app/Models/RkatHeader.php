@@ -3,12 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-<<<<<<< HEAD
 use Illuminate\Database\Eloquent\Relations\BelongsTo; 
-=======
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo; // <-- PENTING: Import BelongsTo
->>>>>>> 73dee42e94c50733d75a184c9e887f1b1c673824
 
 class RkatHeader extends Model
 {
@@ -27,7 +23,6 @@ class RkatHeader extends Model
         'diajukan_oleh', // Pastikan kolom ini ada
     ];
 
-<<<<<<< HEAD
     protected $casts = [
         'tanggal_pengajuan' => 'datetime',
     ];
@@ -47,10 +42,7 @@ class RkatHeader extends Model
 
     // Fungsi ini sekarang sudah benar karena 'use' statement di atas
     public function unit(): BelongsTo
-=======
     // Relasi ke Unit
-    public function unit(): BelongsTo // <-- Type hint yang benar
->>>>>>> 73dee42e94c50733d75a184c9e887f1b1c673824
     {
         return $this->belongsTo(Unit::class, 'id_unit', 'id_unit');
     }
