@@ -21,13 +21,25 @@ Route::get('/', function () {
     ]);
 });
 
-// ROUTE DASHBOARD DIPERBARUI
-Route::get('/dashboard', [DashboardController::class, 'index']) // <<< MEMANGGIL CONTROLLER
-    ->middleware(['auth', 'verified'])
+    // ROUTE DASHBOARD DIPERBARUI
+    Route::get('/dashboard', [DashboardController::class, 'index']) // <<< MEMANGGIL CONTROLLER
+        ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-// Semua rute yang memerlukan otentikasi
-Route::middleware(['auth', 'verified'])->group(function () {
+    // Semua rute yang memerlukan otentikasi
+    Route::middleware(['auth', 'verified'])->group(function () {
+
+    // LPJ CRUD
+    Route::resource('lpj', LpjController::class);
+
+    // Extra route khusus file LPJ
+    Route::post('lpj/{id}/upload', [LpjController::class, 'uploadFile'])->name('lpj.upload');
+    Route::get('lpj/{id}/download', [LpjController::class, 'downloadFile'])->name('lpj.download');
+
+    // Jika ada fitur verifikasi LPJ
+    Route::post('lpj/{id}/approve', [LpjController::class, 'approve'])->name('lpj.approve');
+    Route::post('lpj/{id}/reject', [LpjController::class, 'reject'])->name('lpj.reject');
+
 
     // === RUTE MONITORING RKAT ===
     Route::get('/monitoring', [MonitoringController::class, 'index'])

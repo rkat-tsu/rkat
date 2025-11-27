@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::table('unit', function (Blueprint $table) {
             // Tambahkan kolom setelah 'tipe_unit'
             // Nilai defaultnya bisa disesuaikan, misal 'akademik'
+               if (!Schema::hasColumn('unit', 'jalur_persetujuan')) {
             $table->string('jalur_persetujuan')->default('akademik')->after('tipe_unit');
+           }
         });
     }
 
@@ -24,7 +26,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('unit', function (Blueprint $table) {
+               if (Schema::hasColumn('unit', 'jalur_persetujuan')) {
             $table->dropColumn('jalur_persetujuan');
-        });
+    }
+    });
     }
 };
